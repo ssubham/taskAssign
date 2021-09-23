@@ -6,6 +6,13 @@ This is a task assign module with registered user like Admin, Manager and Custom
 #Required Modules 
 ReactJS, NodeJS, Express, MongoDB and other modules like Axios, mongosh, redux.
 
+#Steps to run the application.
++ cd taskAssign
+ + npm i (for client to install supportive node modules)
+ + npm start (run the front end application)
+ + cd server -> npm i (for server to install supportive node modules)
+ + nodemon index.js (for server to run).
+
 #Structure of Project is as follow:
  + PracticalDemo
     + src
