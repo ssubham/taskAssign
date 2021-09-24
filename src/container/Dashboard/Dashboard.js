@@ -1,6 +1,7 @@
 
 import React, {useContext, useState, useEffect, useRef, Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { Typography, Table, Input, Button, Popconfirm, Form } from 'antd';
 
 import * as actions from '../../store/actions/index';
@@ -143,6 +144,13 @@ class Dashboard extends Component {
         };
     }
 
+    componentDidMount(){
+      console.log(this.props.userId)
+      if(this.props.userId === null){
+        return <Redirect  to="/"/>
+      }
+    }
+
     handleDelete = (key) => {
         const dataSource = [...this.state.dataSource];
         this.setState({
@@ -175,8 +183,12 @@ class Dashboard extends Component {
     onAuth = () => {
 
     }
+    
 
     render(){
+
+      console.log(this.props);
+
         const { dataSource } = this.state;
         const components = {
         body: {
@@ -203,6 +215,9 @@ class Dashboard extends Component {
     return(
         <div>
             <Title level={1}>{this.props.userName}</Title>
+            {this.props.userRole === "customer" ? <div><Typography>Age: {this.props.userAge}</Typography></div> : null}
+            {this.props.userRole === "manager" ? <div><Typography>Role: {this.props.userRole}</Typography></div> : null}
+            {this.props.userRole === "admin" ?
             <div>
                 <Button
                     onClick={this.handleAdd}
@@ -220,7 +235,7 @@ class Dashboard extends Component {
                     dataSource={dataSource}
                     columns={columns}
                 />
-            </div>
+            </div> : null}
         </div>
     )
     }
@@ -231,9 +246,11 @@ const mapStateToProps = state => {
     return {
         loading: state.auth.loading,
         error: state.auth.error,
-        userRole: state.userProfile.role !== null,
-        userName: state.userProfile.username !== null,
-        taskDetails: state.userProfile.taskDetails != null
+        userId: state.auth.userId,
+        userRole: state.auth.role,
+        userName: state.auth.name,
+        userAge: state.auth.age,
+        taskDetails: state.userProfile.taskDetails
         //authRedirectPath: state.auth.authRedirectPath
     }
 }

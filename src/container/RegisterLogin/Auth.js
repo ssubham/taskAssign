@@ -38,7 +38,6 @@ const Auth = props => {
         userage:"",
         role:"customer"
     })
-    console.log("userID ", userId, props.isAuthenticated);
     useEffect(() =>{
         
         if(authRedirectPath !== '/'){
@@ -52,6 +51,7 @@ const Auth = props => {
     }
     const submitHandler = (event) =>{
         //event.preventDefault();
+        
         props.onAuth(authForm.username, authForm.useremail, authForm.userpassword, authForm.userage, authForm.role, isSignup)
     }
     const onRoleChangeHandler=(value) => {

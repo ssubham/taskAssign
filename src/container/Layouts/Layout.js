@@ -20,8 +20,9 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
+    //console.log(state.auth.userId);
     return {
-        isAuthenticated: state.auth.token !== null
+        isAuthenticated: state.auth.userId !== null
     };
 };
 
