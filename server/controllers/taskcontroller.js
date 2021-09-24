@@ -39,7 +39,7 @@ getTaskById = async (req, res) => {
         return res.status(200).json({ success: true, data: user })
     }).catch(err => console.log(err))
 }
-updateTask = async (req, res) => {
+updateTaskById = async (req, res) => {
     const body = req.body;
     if (!body) {
         return res.status(400).json({
@@ -74,9 +74,6 @@ updateTask = async (req, res) => {
                 })
             })
     })
-
-
-
 }
 
 
@@ -94,9 +91,26 @@ getTaskDetails = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+deleteTaskById = async (req, res) => {
+    await taskdetails.findOneAndDelete({ _id: req.params.id }, (err, task) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+
+        if (!task) {
+            return res
+                .status(404)
+                .json({ success: false, error: `task not found` })
+        }
+
+        return res.status(200).json({ success: true, data: task })
+    }).catch(err => console.log(err))
+}
 
 module.exports = {
     createTask,
     getTaskDetails,
     getTaskById,
+    updateTaskById,
+    deleteTaskById
 }

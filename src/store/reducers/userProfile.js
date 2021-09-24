@@ -4,6 +4,7 @@ import { updateObject } from '../../shared/Utility';
 
 const initialState = {
     userName: null,
+    userAge: null,
     taskId: null,
     error: null,
     userRole: null,
@@ -12,24 +13,25 @@ const initialState = {
 }
 
 const updateUserTask = (state, action) => {
-    updateObject(state, {token: null, userId: null});
+    return updateObject(state, {userName: null});
+}
+
+const deleteUserTask = (state, action) =>{
+    return updateObject(state, {userName:null})
 }
 
 const getRecords = (state, action) => {
-    updateObject(state, {token: null, userId: null});
+    return updateObject(state, {userName: action.userName, userRole:action.userRole, userAge:action.userAge});
 }
 
 const getTaskDetails = (state, action) => {
-    updateObject(state, {})
+    return updateObject(state, {})
 }
 const getTaskSuccess = (state, action) => {
-    //console.log("getTaskSuccess ", action.taskDetails)
-    state['taskDetails'] = action.taskDetails;
-    /*updateObject(state, {
+    //state['taskDetails'] = action.taskDetails;
+    return updateObject(state, {
         taskDetails: action.taskDetails
-    })*/
-
-    console.log(initialState)
+    })
 }
 
 
@@ -38,6 +40,7 @@ const reducer = (state = initialState, action) =>{
         case actionTypes.TASK_UPDATE: return updateUserTask(state, action)
         case actionTypes.USER_RECORD: return getRecords(state, action)
         case actionTypes.GET_TASK: return getTaskDetails(state, action)
+        case actionTypes.TASK_DELETE: return deleteUserTask(state, action)
         case actionTypes.TASK_SUCCESS: return getTaskSuccess(state, action)
         default:
             return state;

@@ -5,7 +5,7 @@ import { Typography, Table, Input, Button, Popconfirm, Form } from 'antd';
 
 import * as actions from '../../store/actions/index';
 
-import classes from './Dashboard.css';
+import { } from './Dashboard.css';
 
 const { Title } = Typography;
 
@@ -119,7 +119,7 @@ class Dashboard extends Component {
             render: (_, record) =>
               this.state.dataSource.length >= 1 ? (
                 <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                  <a>Delete</a>
+                  <Button type="link" href="#">Delete</Button>
                 </Popconfirm>
               ) : null,
           },
@@ -232,7 +232,7 @@ const mapStateToProps = state => {
         loading: state.auth.loading,
         error: state.auth.error,
         userRole: state.userProfile.role !== null,
-        userName: "saurabh",//state.userProfile.username !== null,
+        userName: state.userProfile.username !== null,
         taskDetails: state.userProfile.taskDetails != null
         //authRedirectPath: state.auth.authRedirectPath
     }

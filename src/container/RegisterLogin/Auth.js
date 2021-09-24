@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';   
 import { Redirect } from 'react-router-dom';
-//import Aux from '../../hoc/Aux';
 
 import { Form, Button, Input, Select, Typography } from 'antd';
 
-import classes from './Auth.css';
+import { } from './Auth.css';
 import * as actions from '../../store/actions/index';
 //import { checkValidity } from '../../shared/Utility';
 
@@ -15,7 +14,7 @@ const { Title } = Typography;
 
 const layout = {
     labelCol: {
-      span: 8,
+      span: 6,
     },
     wrapperCol: {
       span: 16,
@@ -23,8 +22,7 @@ const layout = {
   };
   const tailLayout = {
     wrapperCol: {
-      offset: 8,
-      span: 16,
+      offset: 1,
     },
   };
 
@@ -32,7 +30,7 @@ const layout = {
 const Auth = props => {
     
     const [isSignup, setIsSignup] = useState(true)
-    const {authRedirectPath, onSetAuthRedirectPath} = props;
+    const {authRedirectPath, onSetAuthRedirectPath, userId} = props;
     const [authForm, setAuthForm] = useState({
         username:"",
         useremail:"",
@@ -40,20 +38,20 @@ const Auth = props => {
         userage:"",
         role:"customer"
     })
+    console.log("userID ", userId, props.isAuthenticated);
     useEffect(() =>{
+        
         if(authRedirectPath !== '/'){
-            //onSetAuthRedirectPath();
+            
+            onSetAuthRedirectPath();
         }
     }, [authRedirectPath, onSetAuthRedirectPath])
     
     const inputChangedHandler = (e) =>{
-
         setAuthForm(prevState => ({...prevState, [e.target.id] : e.target.value}))
-        
     }
     const submitHandler = (event) =>{
         //event.preventDefault();
-        //console.log(authForm);
         props.onAuth(authForm.username, authForm.useremail, authForm.userpassword, authForm.userage, authForm.role, isSignup)
     }
     const onRoleChangeHandler=(value) => {
@@ -69,13 +67,13 @@ const Auth = props => {
     }
 
     let authRedirect = null;
-    console.log("props.isAuthenticated ", props.isAuthenticated, props.authRedirectPath);
+    
     if(props.isAuthenticated && props.authRedirectPath !== undefined){
         authRedirect = <Redirect to={props.authRedirectPath} />
     }
 
     return (
-        <div className={classes.Auth}>
+        <div className={"Auth"}>
             {authRedirect}
             {errorMsg}
 
@@ -166,13 +164,14 @@ const mapStateToProps = state => {
         loading: state.auth.loading,
         error: state.auth.error,
         isAuthenticated: state.auth.userId !== null,
+        userId: state.auth.userId,
         authRedirectPath: state.auth.authRedirectPath
     }
 }
 
 const mapDispatchToProps = dispatch =>{
     return {
-        onAuth: (name, email, password, age, role, isSignup) => dispatch(actions.auth(name, email, password, age, role, isSignup)),
+        onAuth: (name, email, password, age, role, isSignup) => dispatch(actions.authValidate(name, email, password, age, role, isSignup)),
         onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
         
     }

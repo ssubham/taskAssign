@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 
-import { Table } from 'antd';
+import { Table} from 'antd';
 
-import classes from './Home.css';
+import { }from './Home.css';
 
 
 const columns = [
@@ -23,29 +23,15 @@ const columns = [
     }
   ];
 
-
-
-//const originData = [];
-    /*for (let i = 0; i < 10; i++) {
-        originData.push({
-          key: i.toString(),
-          task: `Edrward ${i}`,
-          username: "test1",
-          assigned: `London Park no`,
-        });
-      }*/
-      
-
-
 const Home = (props) => {
   
   const {taskDetails, onTaskData} = props;
   const [originalData, setOriginalData] = useState([]);
 
   useEffect(() => {
-    if(props.taskDetails !== null){
+    if(taskDetails !== null){
       const tempDataArr = [];
-      const tData = props.taskDetails.map((tasks) => {
+      taskDetails.map((tasks) => {
         return (
           tempDataArr.push({key:tasks._id.toString(), task: tasks.name, username: tasks.username, assigned: tasks.assignedto})
         )
@@ -57,7 +43,7 @@ const Home = (props) => {
 
     return (
         
-            <Table className={classes.tableView}
+            <Table className={"tableView"}
                 components={{
                 
                 }}
@@ -74,9 +60,9 @@ const Home = (props) => {
 }
 
 const mapStateToProps = state => {
-  console.log("user ", state.userProfile.taskDetails)
+  //console.log("user ", state.userProfile.taskDetails)
     return {
-        //isAuthenticated: state.auth.userId !== null,
+        isAuthenticated: state.auth.userId !== null,
         taskDetails: state.userProfile.taskDetails
     };
 };

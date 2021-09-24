@@ -1,4 +1,3 @@
-//import { act } from 'react-dom/test-utils';
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
 
@@ -29,9 +28,8 @@ export const authFail = (error) =>{
 }
 
 export const logout = () =>{
-   // localStorage.removeItem('expirationDate');
-   // localStorage.removeItem('token');
-   // localStorage.removeItem('userId');
+    localStorage.removeItem('userId');
+    
     return {
         type: actionTypes.AUTH_INITIATE_LOGOUT
     }
@@ -44,17 +42,10 @@ export const logoutSucceed = () =>{
 }
 
 
-export const auth = (username, email, password, age, role, isSignup) =>{
-    console.log(username, password, isSignup)
-    /*return {
-        type: actionTypes.AUTH_USER,
-        email: email,
-        password: password,
-        isSignup: isSignup,
-    }*/
+export const authValidate = (username, email, password, age, role, isSignup) =>{
     
     return dispatch =>{
-        //dispatch(authStart);
+        
         let authData = {
             name:username,
             password:password,
@@ -65,19 +56,15 @@ export const auth = (username, email, password, age, role, isSignup) =>{
             Object.assign(authData, {'email':email, 'age': age, 'role': role})
         }
         
-        
-        //if(!isSignup){
-            axios.post(url, authData)
-            .then(response => {
-                console.log("authSuccess ", response );
-                dispatch(authSuccess(response.data._id, response.data.name, response.data.age, response.data.role))
-            })
-            .catch(err =>{
-                console.log("authError ", err)
-                dispatch(authFail(err.error));
-            })
-        //}
-        
+        axios.post(url, authData)
+        .then(response => {
+            localStorage.setItem('userId', response.data.data._id);
+            dispatch(authSuccess(response.data.data._id, response.data.data.name, response.data.data.age, response.data.data.role))
+        })
+        .catch(err =>{
+            console.log("authError ", err)
+            dispatch(authFail(err.error));
+        })
     }
 }
 
@@ -94,22 +81,4 @@ export const authCheckState = () =>{
     return {
         type:actionTypes.AUTH_CHECK_STATE,
     }
-
-    /*return dispatch => {
-        const token = localStorage.getItem('token');
-        if(!token){
-            dispatch(logout());
-        } else {
-            const expirationDate = new Date(localStorage.getItem('expirationDate'));
-            //console.log(new Date(expirationDate).getTime(), new Date().getTime())
-            if(expirationDate <= new Date()){
-                dispatch(logout())
-            } else {
-                const userId = localStorage.getItem('userId');
-                dispatch(authSuccess(token, userId));
-                dispatch(checkAuthTimeOut((expirationDate.getTime() - new Date().getTime()) /1000 ));
-            }
-            
-        }
-    }*/
 }

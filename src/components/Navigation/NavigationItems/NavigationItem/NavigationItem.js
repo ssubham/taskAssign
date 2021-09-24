@@ -1,14 +1,17 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom'
-import classes from './NavigationItem.css'
+//import { NavLink } from 'react-router-dom'
+import { Button } from 'antd';
+
+import {} from './NavigationItem.css'
 
 const navigationItem = (props) => (
-    <li className={classes.NavigationItem}>
-        <NavLink
+    <li className={"NavigationItem"}>
+        <Button type="link"
             to={props.link}
+            href={props.link}
             exact={props.exact}
-            activeClassName={classes.active}
-        >{props.children}</NavLink>
+            activeClassName={"active"}
+        >{props.children}</Button>
                  {/*<a href={props.link} className={props.active ? classes.active : null}>{props.children}</a>*/}
     </li>
 )
