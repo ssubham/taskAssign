@@ -1,6 +1,10 @@
 const taskdetails = require('../models/task-details');
 
+
+// Inserting individual task....
+
 createTask = (req, res) => {
+    console.log("create task ", req.body)
     const body = req.body;
     if (!body) {
         return res.status(400).json({
@@ -31,6 +35,7 @@ createTask = (req, res) => {
 }
 
 getTaskById = async (req, res) => {
+    console.log(req);
     await taskdetails.findOne({ _id: req.params.id }, (err, user) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -39,6 +44,8 @@ getTaskById = async (req, res) => {
         return res.status(200).json({ success: true, data: user })
     }).catch(err => console.log(err))
 }
+
+// Updating the task by Id.
 updateTaskById = async (req, res) => {
     const body = req.body;
     if (!body) {
@@ -76,7 +83,7 @@ updateTaskById = async (req, res) => {
     })
 }
 
-
+// Getting all the tasks.
 getTaskDetails = async (req, res) => {
     await taskdetails.find({}, (err, result) => {
         if (err) {
@@ -91,7 +98,9 @@ getTaskDetails = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+// Deleting Individual task.
 deleteTaskById = async (req, res) => {
+    console.log(req)
     await taskdetails.findOneAndDelete({ _id: req.params.id }, (err, task) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })

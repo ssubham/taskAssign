@@ -11,6 +11,7 @@ export const SET_AUTH_REDIRECT_PATH = "SET_AUTH_REDIRECT_PATH";
 
 
 export const USER_RECORD = "USER_RECORD";
+export const TASK_ADD = "TASK_ADD"; 
 export const TASK_UPDATE = "TASK_UPDATE";
 export const TASK_DELETE = "TASK_DELETE";
 export const GET_TASK = "GET_TASK";

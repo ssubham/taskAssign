@@ -101,25 +101,25 @@ class Dashboard extends Component {
         super(props);
         this.columns = [
           {
-            title: 'name',
+            title: 'Name',
             dataIndex: 'name',
             width: '30%',
             editable: true,
           },
           {
-            title: 'age',
-            dataIndex: 'age',
+            title: 'Assigned by',
+            dataIndex: 'username',
           },
           {
-            title: 'address',
-            dataIndex: 'address',
+            title: 'Assigned to',
+            dataIndex: 'assignedto',
           },
           {
             title: 'operation',
             dataIndex: 'operation',
             render: (_, record) =>
               this.state.dataSource.length >= 1 ? (
-                <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+                <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record._id)}>
                   <Button type="link" href="#">Delete</Button>
                 </Popconfirm>
               ) : null,
@@ -145,39 +145,60 @@ class Dashboard extends Component {
     }
 
     componentDidMount(){
-      console.log(this.props.userId)
+      
       if(this.props.userId === null){
         return <Redirect  to="/"/>
       }
+
+      if(this.props.userRole === 'admin'){
+        //onFetch
+        this.props.getTaskDetails()
+        console.log(this.props.taskDetails);
+        const updatedTask = this.props.taskDetails.map((task) => {
+          return (
+            Object.assign({key:task._id}, {name:task.name, username: task.username, assignedto: task.assignedto})
+          )
+        })
+        //console.log(updatedTask);
+
+        this.setState({dataSource:this.props.taskDetails, count:this.props.taskDetails.length})
+      } 
     }
 
     handleDelete = (key) => {
         const dataSource = [...this.state.dataSource];
+        
         this.setState({
-          dataSource: dataSource.filter((item) => item.key !== key),
+          dataSource: dataSource.filter((item) => item._id !== key),
         });
+        //console.log(key);
+        this.props.deleteTask(key);
       };
       handleAdd = () => {
         const { count, dataSource } = this.state;
+        const key = Math.random();
         const newData = {
-          key: count,
-          name: `Edward King ${count}`,
-          age: '32',
-          address: `London, Park Lane no. ${count}`,
+          //key: key,
+          _id: key,
+          name: `new Task${count}`,
+          username: this.props.userName,
+          assignedto: `dummy assigny`,
         };
         this.setState({
           dataSource: [...dataSource, newData],
           count: count + 1,
         });
+        this.props.handleAdd(newData);
       };
       handleSave = (row) => {
         const newData = [...this.state.dataSource];
-        const index = newData.findIndex((item) => row.key === item.key);
+        const index = newData.findIndex((item) => row._id === item._id);
         const item = newData[index];
         newData.splice(index, 1, { ...item, ...row });
         this.setState({
           dataSource: newData,
         });
+        this.props.updateTask(row);
     };
 
     onAuth = () => {
@@ -186,9 +207,6 @@ class Dashboard extends Component {
     
 
     render(){
-
-      console.log(this.props);
-
         const { dataSource } = this.state;
         const components = {
         body: {
@@ -251,13 +269,16 @@ const mapStateToProps = state => {
         userName: state.auth.name,
         userAge: state.auth.age,
         taskDetails: state.userProfile.taskDetails
-        //authRedirectPath: state.auth.authRedirectPath
     }
 }
 
+
 const mapDispatchToProps = dispatch =>{
     return {
-        onAuth: (username, role) => dispatch(actions.getRecords(username, role)),
+      handleAdd: (tasks) => dispatch(actions.addTask(tasks)),
+      updateTask: (task) => dispatch(actions.updateTaskData(task)),
+      deleteTask:(pId) => dispatch(actions.deleteTaskData(pId)),
+      getTaskDetails: () => dispatch(actions.getTaskData),
     }
 }
 

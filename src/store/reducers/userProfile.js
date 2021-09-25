@@ -12,6 +12,10 @@ const initialState = {
     loading: false,
 }
 
+const addTask = (state, action) => {
+    console.log("adding task ", action)
+    return updateObject(state, {})
+}
 const updateUserTask = (state, action) => {
     return updateObject(state, {userName: null});
 }
@@ -25,10 +29,11 @@ const getRecords = (state, action) => {
 }
 
 const getTaskDetails = (state, action) => {
-    return updateObject(state, {})
+    return updateObject(state, {taskDetails: action.taskDetails})
 }
 const getTaskSuccess = (state, action) => {
     //state['taskDetails'] = action.taskDetails;
+    //console.log("task success ", action.taskDetails)
     return updateObject(state, {
         taskDetails: action.taskDetails
     })
@@ -37,6 +42,7 @@ const getTaskSuccess = (state, action) => {
 
 const reducer = (state = initialState, action) =>{
     switch(action.type){
+        case actionTypes.TASK_ADD: return addTask(state, action)
         case actionTypes.TASK_UPDATE: return updateUserTask(state, action)
         case actionTypes.USER_RECORD: return getRecords(state, action)
         case actionTypes.GET_TASK: return getTaskDetails(state, action)
